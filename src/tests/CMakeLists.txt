@@ -6,6 +6,8 @@ set(TARGET
 
 set(SOURCES
     main.cpp
+
+    test.cpp
 )
 
 add_executable(${TARGET} ${SOURCES})
