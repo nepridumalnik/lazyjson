@@ -8,6 +8,7 @@ set(SOURCES
     main.cpp
 
     test.cpp
+    variant.cpp
 )
 
 get_filename_component(PARENT_DIR ../ ABSOLUTE)
