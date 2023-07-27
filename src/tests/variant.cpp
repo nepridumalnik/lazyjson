@@ -90,7 +90,7 @@ TEST(VariantUsage, CheckTypeAfterClear)
     ASSERT_NO_THROW(var = int{});
     ASSERT_TRUE(var.is_type<int>());
 
-    var.clear();
+    ASSERT_NO_THROW(var.clear());
 
     ASSERT_FALSE(var.is_type<int>());
     ASSERT_FALSE(var.is_type<bool>());
