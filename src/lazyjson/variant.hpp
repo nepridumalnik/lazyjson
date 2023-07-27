@@ -3,7 +3,6 @@
 #include <typeindex>
 #include <type_traits>
 #include <stdexcept>
-#include <algorithm>
 #include <cstddef>
 
 namespace lazyjson
