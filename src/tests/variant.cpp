@@ -193,46 +193,41 @@ TEST(VariantUsage, StringSetValue)
     }
 }
 
-class Deleteable
+/// @brief Структура-трассировщик, увеличивающая значение счётчика при удалении
+struct Tracer
 {
-public:
-    Deleteable(bool& flag)
-        : m_flag{flag}
+    /// @brief Конструктор
+    /// @param value ссылка счётчик
+    Tracer(int& value)
+        : m_value{value}
     {
     }
 
-    Deleteable(Deleteable&& other)
-        : m_flag{other.m_flag}
+    /// @brief Деструктор
+    ~Tracer()
     {
-        static bool staticFlag;
-        other.m_flag = staticFlag;
-    }
-
-    Deleteable(const Deleteable& other)
-        : m_flag{other.m_flag}
-    {
-    }
-
-    ~Deleteable()
-    {
-        m_flag = !m_flag;
+        ++m_value;
     }
 
 private:
-    bool& m_flag;
+    /// @brief Ссылка на счётчик
+    int& m_value;
 };
 
 // Уничтожение экземпляра класса
 TEST(VariantUsage, DestroyClassInstance)
 {
-    json::variant<Deleteable> var;
+    json::variant<Tracer> var;
 
-    bool isDeleted = false;
-    var = Deleteable{isDeleted};
+    int counter = 0;
+    var = Tracer{counter};
 
     ASSERT_FALSE(var.empty());
 
     var.clear();
     ASSERT_TRUE(var.empty());
-    ASSERT_TRUE(isDeleted);
+
+    // Должно было уничтожиться два раза из-за простоты структуры
+    // Т.к. структура уничтожается при первом создании и при очистке variant
+    ASSERT_EQ(counter, 2);
 }

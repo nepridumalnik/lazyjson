@@ -119,15 +119,32 @@ public:
         return *this;
     }
 
+    /// @brief Шаблонная функция, удаляющая объект, если он правильного типа
+    /// @tparam T сравнимый тип
+    /// @param idx индекс типа
+    /// @param ptr указатель на данные
+    /// @return True, если был вызван деструктор
+    template<typename T>
+    bool destroy_value(const std::type_index& idx, const void* ptr)
+    {
+        if(idx == typeid(T))
+        {
+            reinterpret_cast<const T*>(m_data)->~T();
+            return true;
+        }
+
+        return false;
+    }
+
     /// @brief Очистка содержимого
     void clear()
     {
         if(!empty())
         {
-            // TODO: исправить очистку памяти
-            void* data_ptr = static_cast<void*>(m_data);
-            std::destroy_at(std::addressof(data_ptr));
-            std::memset(data_ptr, 0, m_max_size);
+            // Перебираем все шаблонные типы и вызываем их деструкторы
+            ((destroy_value<Ts>(m_type, static_cast<void*>(m_data)) || ...));
+
+            std::memset(m_data, 0, m_max_size);
             m_type = typeid(void);
         }
     }
@@ -156,10 +173,10 @@ private:
     static constexpr size_t m_alignment = alignof(std::aligned_union_t<0, Ts...>);
 
     /// @brief Хранимый тип
-    std::type_index m_type = typeid(void);
+    std::type_index m_type{typeid(void)};
 
     /// @brief Хранилище
-    std::byte m_data[m_max_size];
+    std::byte m_data[m_max_size]{};
 };
 
 } // namespace lazyjson
