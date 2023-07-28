@@ -138,3 +138,101 @@ TEST(VariantUsage, StringComparison)
         ASSERT_TRUE(var == check);
     }
 }
+
+// Присваивание булевых значений
+TEST(VariantUsage, BoolSetValue)
+{
+    json::variant<bool> var;
+
+    bool test;
+    var = true;
+    ASSERT_NO_THROW(test = var.get<bool>());
+    ASSERT_TRUE(var == test);
+
+    ASSERT_THROW(int test = var.get<int>(), std::bad_variant_access);
+}
+
+// Присваивание целочисленных значений
+TEST(VariantUsage, IntSetValue)
+{
+    json::variant<int> var;
+
+    for(int i = -1000; i < 1000; ++i)
+    {
+        var = i;
+
+        ASSERT_TRUE(var == i);
+
+        int test;
+        ASSERT_NO_THROW(test = var.get<int>());
+        ASSERT_TRUE(var == test);
+
+        ASSERT_THROW(std::string test = var.get<std::string>(), std::bad_variant_access);
+    }
+}
+
+// Присваивание строковых значений
+TEST(VariantUsage, StringSetValue)
+{
+    json::variant<std::string> var;
+    std::string check;
+
+    for(char c = -128; c < 127; ++c)
+    {
+        check += c;
+        var = check;
+
+        ASSERT_TRUE(var == check);
+
+        std::string test = var.get<std::string>();
+
+        ASSERT_TRUE(var == test);
+        ASSERT_TRUE(check == test);
+
+        ASSERT_THROW(int test = var.get<int>(), std::bad_variant_access);
+    }
+}
+
+class Deleteable
+{
+public:
+    Deleteable(bool& flag)
+        : m_flag{flag}
+    {
+    }
+
+    Deleteable(Deleteable&& other)
+        : m_flag{other.m_flag}
+    {
+        static bool staticFlag;
+        other.m_flag = staticFlag;
+    }
+
+    Deleteable(const Deleteable& other)
+        : m_flag{other.m_flag}
+    {
+    }
+
+    ~Deleteable()
+    {
+        m_flag = !m_flag;
+    }
+
+private:
+    bool& m_flag;
+};
+
+// Уничтожение экземпляра класса
+TEST(VariantUsage, DestroyClassInstance)
+{
+    json::variant<Deleteable> var;
+
+    bool isDeleted = false;
+    var = Deleteable{isDeleted};
+
+    ASSERT_FALSE(var.empty());
+
+    var.clear();
+    ASSERT_TRUE(var.empty());
+    ASSERT_TRUE(isDeleted);
+}

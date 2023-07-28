@@ -68,7 +68,7 @@ public:
             throw std::bad_variant_access();
         }
 
-        return *reinterpret_cast<const T*>(m_data);
+        return *reinterpret_cast<T*>(m_data);
     }
 
     /// @brief Оператор сравнения
@@ -108,7 +108,7 @@ public:
             throw std::bad_variant_access();
         }
 
-        if(m_type != typeid(void))
+        if(!empty())
         {
             reinterpret_cast<const T*>(m_data)->~T();
         }
@@ -122,13 +122,21 @@ public:
     /// @brief Очистка содержимого
     void clear()
     {
-        if(m_type != typeid(void))
+        if(!empty())
         {
+            // TODO: исправить очистку памяти
             void* data_ptr = static_cast<void*>(m_data);
-            std::destroy_at(static_cast<typename std::aligned_union<0, Ts...>::type*>(data_ptr));
+            std::destroy_at(std::addressof(data_ptr));
             std::memset(data_ptr, 0, m_max_size);
             m_type = typeid(void);
         }
+    }
+
+    /// @brief Значение отсутствует
+    /// @return True, если нет значения
+    bool empty() const
+    {
+        return m_type == typeid(void);
     }
 
     /// @brief Проверка допустим ли тип
