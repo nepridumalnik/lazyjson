@@ -198,7 +198,7 @@ struct Tracer
 {
     /// @brief Конструктор
     /// @param value ссылка счётчик
-    Tracer(int& value)
+    Tracer(size_t& value)
         : m_value{value}
     {
     }
@@ -211,7 +211,7 @@ struct Tracer
 
 private:
     /// @brief Ссылка на счётчик
-    int& m_value;
+    size_t& m_value;
 };
 
 // Уничтожение экземпляра класса
@@ -219,7 +219,7 @@ TEST(VariantUsage, DestroyClassInstance)
 {
     json::variant<Tracer> var;
 
-    int counter = 0;
+    size_t counter = 0;
     var = Tracer{counter};
 
     ASSERT_FALSE(var.empty());
