@@ -1,6 +1,6 @@
-#include <gtest/gtest.h>
-
 #include <lazyjson/json.hpp>
+
+#include <gtest/gtest.h>
 
 namespace json = lazyjson;
 

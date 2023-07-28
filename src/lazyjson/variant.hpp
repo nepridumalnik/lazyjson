@@ -57,6 +57,46 @@ public:
         return *reinterpret_cast<const T*>(m_data);
     }
 
+    /// @brief Получить значение требуемого типа
+    /// @tparam T тип значения
+    /// @return Значение
+    template<typename T>
+    T& get()
+    {
+        if(!is_type<T>())
+        {
+            throw std::bad_variant_access();
+        }
+
+        return *reinterpret_cast<const T*>(m_data);
+    }
+
+    /// @brief Оператор сравнения
+    /// @tparam T тип
+    /// @param value значение
+    /// @return True, если значения равны
+    template<typename T>
+    bool operator==(const T& value)
+    {
+        if(m_type != typeid(T))
+        {
+            throw std::bad_variant_access();
+        }
+
+        const auto& data = *reinterpret_cast<const T*>(m_data);
+        return data == value;
+    }
+
+    /// @brief Оператор сравнения
+    /// @tparam T тип
+    /// @param value значение
+    /// @return True, если значения не равны
+    template<typename T>
+    bool operator!=(const T& value)
+    {
+        return !operator==(value);
+    }
+
     /// @brief Оператор присваивания для значения требуемого типа
     /// @tparam T тип значения
     /// @return Ссылка на экземпляр
@@ -68,15 +108,12 @@ public:
             throw std::bad_variant_access();
         }
 
-        constexpr std::size_t offset = (m_alignment - (sizeof(T) % m_alignment)) % m_alignment;
-        std::byte* aligned_data = m_data + offset;
-
         if(m_type != typeid(void))
         {
             reinterpret_cast<const T*>(m_data)->~T();
         }
 
-        new(aligned_data) T(value);
+        new(m_data) T(value);
         m_type = typeid(T);
 
         return *this;

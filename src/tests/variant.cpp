@@ -1,6 +1,8 @@
+#include <lazyjson/variant.hpp>
+
 #include <gtest/gtest.h>
 
-#include <lazyjson/variant.hpp>
+#include <string>
 
 namespace json = lazyjson;
 
@@ -94,4 +96,45 @@ TEST(VariantUsage, CheckTypeAfterClear)
 
     ASSERT_FALSE(var.is_type<int>());
     ASSERT_FALSE(var.is_type<bool>());
+}
+
+// Сравнение булевых значений
+TEST(VariantUsage, BoolComparison)
+{
+    json::variant<bool> var;
+
+    var = false;
+    ASSERT_TRUE(var == false);
+    ASSERT_TRUE(var != true);
+    var = true;
+    ASSERT_TRUE(var == true);
+    ASSERT_TRUE(var != false);
+}
+
+// Сравнение целочисленных значений
+TEST(VariantUsage, IntComparison)
+{
+    json::variant<int> var;
+
+    for(int i = -1000; i < 1000; ++i)
+    {
+        var = i;
+
+        ASSERT_TRUE(var == i);
+    }
+}
+
+// Сравнение строковых значений
+TEST(VariantUsage, StringComparison)
+{
+    json::variant<std::string> var;
+    std::string check;
+
+    for(char c = -128; c < 127; ++c)
+    {
+        check += c;
+        var = check;
+
+        ASSERT_TRUE(var == check);
+    }
 }
