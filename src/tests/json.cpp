@@ -13,6 +13,9 @@ TEST(Test, BoolValue)
     json::json json;
     json["test"] = test;
 
+    ASSERT_TRUE(json["test"].is_type<bool>());
+    ASSERT_FALSE(json["test"].is_type<std::string>());
+
     const bool res = json["test"].get<bool>();
     ASSERT_EQ(res, test);
 }
@@ -23,6 +26,9 @@ TEST(Test, IntValue)
     const int test = 12345;
     json::json json;
     json["test"] = test;
+
+    ASSERT_TRUE(json["test"].is_type<int>());
+    ASSERT_FALSE(json["test"].is_type<float>());
 
     const int res = json["test"].get<int>();
     ASSERT_EQ(res, test);
@@ -35,6 +41,9 @@ TEST(Test, FloatValue)
     json::json json;
     json["test"] = test;
 
+    ASSERT_TRUE(json["test"].is_type<float>());
+    ASSERT_FALSE(json["test"].is_type<int>());
+
     const float res = json["test"].get<float>();
     ASSERT_EQ(res, test);
 }
@@ -45,6 +54,9 @@ TEST(Test, StringValue)
     const std::string test = "Some random string value";
     json::json json;
     json["test"] = test;
+
+    ASSERT_TRUE(json["test"].is_type<std::string>());
+    ASSERT_FALSE(json["test"].is_type<bool>());
 
     const std::string res = json["test"].get<std::string>();
     ASSERT_EQ(res, test);
