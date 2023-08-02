@@ -4,13 +4,15 @@
 
 #include <string>
 #include <unordered_map>
-#include <string_view>
 
 namespace lazyjson
 {
 
+/// @brief Предопределение класса
+class json;
+
 /// @brief Тип значения
-using element = variant<int, float, bool, std::string>;
+using element = variant<int, float, bool, std::string, json>;
 
 /// @brief JSON объект
 class json
