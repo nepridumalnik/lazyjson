@@ -6,6 +6,43 @@
 
 namespace json = lazyjson;
 
+/// @brief Структура-трассировщик, увеличивающая значение счётчика при удалении
+struct Tracer
+{
+    /// @brief Конструктор
+    /// @param value ссылка счётчик
+    /// @param should_change следует ли изменить счётчик
+    Tracer(size_t& value, bool should_change = true)
+        : m_value{value}
+        , m_should_change{should_change}
+    {
+    }
+
+    /// @brief Конструктор копирования
+    /// @param other другой объект
+    Tracer(const Tracer& other)
+        : m_value{other.m_value}
+        , m_should_change{true}
+    {
+    }
+
+    /// @brief Деструктор
+    ~Tracer()
+    {
+        if(m_should_change)
+        {
+            ++m_value;
+        }
+    }
+
+private:
+    /// @brief Ссылка на счётчик
+    size_t& m_value;
+
+    /// @brief Следует изменить счётчик
+    bool m_should_change;
+};
+
 /// @brief Создать класс одного типа и положить в него значение другого типа
 /// @tparam Ta первый тип
 /// @tparam Tb второй тип
@@ -193,34 +230,13 @@ TEST(VariantUsage, StringSetValue)
     }
 }
 
-/// @brief Структура-трассировщик, увеличивающая значение счётчика при удалении
-struct Tracer
-{
-    /// @brief Конструктор
-    /// @param value ссылка счётчик
-    Tracer(size_t& value)
-        : m_value{value}
-    {
-    }
-
-    /// @brief Деструктор
-    ~Tracer()
-    {
-        ++m_value;
-    }
-
-private:
-    /// @brief Ссылка на счётчик
-    size_t& m_value;
-};
-
 // Уничтожение экземпляра класса
 TEST(VariantUsage, DestroyClassInstance)
 {
     json::variant<Tracer> var;
 
     size_t counter = 0;
-    var = Tracer{counter};
+    var = Tracer{counter, false};
 
     ASSERT_FALSE(var.empty());
 
@@ -229,5 +245,5 @@ TEST(VariantUsage, DestroyClassInstance)
 
     // Должно было уничтожиться два раза из-за простоты структуры
     // Т.к. структура уничтожается при первом создании и при очистке variant
-    ASSERT_EQ(counter, 2);
+    ASSERT_EQ(counter, 1);
 }

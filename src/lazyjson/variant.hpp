@@ -119,23 +119,6 @@ public:
         return *this;
     }
 
-    /// @brief Шаблонная функция, удаляющая объект, если он правильного типа
-    /// @tparam T сравнимый тип
-    /// @param idx индекс типа
-    /// @param ptr указатель на данные
-    /// @return True, если был вызван деструктор
-    template<typename T>
-    bool destroy_value(const std::type_index& idx, const void* ptr)
-    {
-        if(idx == typeid(T))
-        {
-            reinterpret_cast<const T*>(m_data)->~T();
-            return true;
-        }
-
-        return false;
-    }
-
     /// @brief Очистка содержимого
     void clear()
     {
@@ -163,6 +146,24 @@ public:
     bool is_valid_type() const
     {
         return ((std::is_same_v<T, Ts> || ...));
+    }
+
+private:
+    /// @brief Шаблонная функция, удаляющая объект, если он правильного типа
+    /// @tparam T сравнимый тип
+    /// @param idx индекс типа
+    /// @param ptr указатель на данные
+    /// @return True, если был вызван деструктор
+    template<typename T>
+    bool destroy_value(const std::type_index& idx, const void* ptr)
+    {
+        if(idx == typeid(T))
+        {
+            reinterpret_cast<const T*>(m_data)->~T();
+            return true;
+        }
+
+        return false;
     }
 
 private:
