@@ -7,7 +7,7 @@ set(TARGET
 set(SOURCES
     main.cpp
 
-    test.cpp
+    json.cpp
     variant.cpp
 )
 

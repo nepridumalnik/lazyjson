@@ -1,6 +1,7 @@
 #pragma once
 
-#include <variant>
+#include <lazyjson/variant.hpp>
+
 #include <string>
 #include <unordered_map>
 #include <string_view>
@@ -9,7 +10,7 @@ namespace lazyjson
 {
 
 /// @brief Тип значения
-using element = std::variant<int, bool, std::string>;
+using element = variant<int, float, bool, std::string>;
 
 /// @brief JSON объект
 class Json
