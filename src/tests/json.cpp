@@ -7,7 +7,7 @@
 namespace json = lazyjson;
 
 // Присваивание булевого значения
-TEST(Test, BoolValue)
+TEST(JsonUsage, BoolValue)
 {
     const bool test = true;
     json::json json;
@@ -21,7 +21,7 @@ TEST(Test, BoolValue)
 }
 
 // Присваивание целочисленного значения
-TEST(Test, IntValue)
+TEST(JsonUsage, IntValue)
 {
     const int test = 12345;
     json::json json;
@@ -35,7 +35,7 @@ TEST(Test, IntValue)
 }
 
 // Присваивание вещественного значения
-TEST(Test, FloatValue)
+TEST(JsonUsage, FloatValue)
 {
     const float test = 12345.54321;
     json::json json;
@@ -49,7 +49,7 @@ TEST(Test, FloatValue)
 }
 
 // Присваивание строкового значения
-TEST(Test, StringValue)
+TEST(JsonUsage, StringValue)
 {
     const std::string test = "Some random string value";
     json::json json;
@@ -60,4 +60,38 @@ TEST(Test, StringValue)
 
     const std::string res = json["test"].get<std::string>();
     ASSERT_EQ(res, test);
+}
+
+// Использование массива
+TEST(JsonUsage, Array)
+{
+    json::json json;
+    auto& array = (json["array"] = json::array{}).get<json::array>();
+
+    json::element num{1};
+    json::element text{std::string{"some very long and useless text"}};
+    json::element value{true};
+
+    array.push_back(num);
+    array.push_back(text);
+    array.push_back(value);
+    text.get<std::string>();
+
+    // TODO: исправить ошибку освобождения памяти в text
+
+    for(const json::element& e: array)
+    {
+        if(e.is_type<int>())
+        {
+            ASSERT_TRUE(e.get<int>() == num.get<int>());
+        }
+        else if(e.is_type<std::string>())
+        {
+            ASSERT_TRUE(e.get<std::string>() == text.get<std::string>());
+        }
+        else if(e.is_type<bool>())
+        {
+            ASSERT_TRUE(e.get<bool>() == value.get<bool>());
+        }
+    }
 }

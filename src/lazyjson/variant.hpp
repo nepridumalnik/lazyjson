@@ -159,7 +159,8 @@ private:
     {
         if(idx == typeid(T))
         {
-            reinterpret_cast<const T*>(m_data)->~T();
+            auto ptr = reinterpret_cast<const T*>(m_data);
+            ptr->~T();
             return true;
         }
 
