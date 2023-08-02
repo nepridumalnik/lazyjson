@@ -13,7 +13,7 @@ namespace lazyjson
 using element = variant<int, float, bool, std::string>;
 
 /// @brief JSON объект
-class Json
+class json
 {
 public:
     element& operator[](const std::string& key)

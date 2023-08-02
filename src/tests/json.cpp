@@ -10,7 +10,7 @@ namespace json = lazyjson;
 TEST(Test, BoolValue)
 {
     const bool test = true;
-    json::Json json;
+    json::json json;
     json["test"] = test;
 
     const bool res = json["test"].get<bool>();
@@ -21,7 +21,7 @@ TEST(Test, BoolValue)
 TEST(Test, IntValue)
 {
     const int test = 12345;
-    json::Json json;
+    json::json json;
     json["test"] = test;
 
     const int res = json["test"].get<int>();
@@ -32,7 +32,7 @@ TEST(Test, IntValue)
 TEST(Test, FloatValue)
 {
     const float test = 12345.54321;
-    json::Json json;
+    json::json json;
     json["test"] = test;
 
     const float res = json["test"].get<float>();
@@ -43,7 +43,7 @@ TEST(Test, FloatValue)
 TEST(Test, StringValue)
 {
     const std::string test = "Some random string value";
-    json::Json json;
+    json::json json;
     json["test"] = test;
 
     const std::string res = json["test"].get<std::string>();
