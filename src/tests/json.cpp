@@ -197,10 +197,17 @@ TEST(JsonUsage, CompareCopiedArrays)
     array1.push_back(json::element{1.0123f});
 
     array2 = array1;
+
     json::array array3{array2};
     json::array array4 = array3;
 
-    ASSERT_EQ(array1, array2);
-    ASSERT_EQ(array1, array3);
-    ASSERT_EQ(array1, array4);
+    const std::vector<json::array> v{array1, array2, array3, array4};
+
+    for(size_t i = 0; i < v.size(); ++i)
+    {
+        for(size_t j = i + 1; j < v.size(); ++j)
+        {
+            ASSERT_EQ(v[i], v[j]);
+        }
+    }
 }
