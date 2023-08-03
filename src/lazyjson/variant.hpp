@@ -201,17 +201,11 @@ private:
     }
 
 private:
-    /// @brief Размер хранилища
-    static constexpr size_t m_max_size = sizeof(std::aligned_union_t<0, Ts...>);
-
-    /// @brief Размер выравнивания
-    static constexpr size_t m_alignment = alignof(std::aligned_union_t<0, Ts...>);
-
     /// @brief Хранимый тип
     std::type_index m_type{typeid(void)};
 
     /// @brief Хранилище
-    void* m_data = nullptr;
+    void* m_data{nullptr};
 };
 
 } // namespace lazyjson
