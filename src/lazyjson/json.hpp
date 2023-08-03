@@ -243,6 +243,11 @@ public:
     /// @return True, если равны
     bool operator==(const json& other) const
     {
+        if(m_obj.size() != other.m_obj.size())
+        {
+            return false;
+        }
+
         for(auto this_it = m_obj.begin(), other_it = other.m_obj.begin();
             this_it != m_obj.end() && other_it != other.m_obj.end();
             ++this_it, ++other_it)
@@ -266,7 +271,7 @@ public:
     /// @return True, если не равны
     bool operator!=(const json& other) const
     {
-        return operator==(other);
+        return !operator==(other);
     }
 
 private:

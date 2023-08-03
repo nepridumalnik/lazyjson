@@ -115,3 +115,38 @@ TEST(JsonUsage, CompareEqualJsons)
 
     ASSERT_EQ(json1, json2);
 }
+
+// Сравнение разных JSON объектов
+TEST(JsonUsage, CompareNotEqualJsons)
+{
+    json::json json1;
+    json::json json2;
+    json::json json3;
+    json::json json4;
+    json::json json5;
+
+    json::array array;
+
+    array.push_back(json::element{1});
+    array.push_back(json::element{std::string{"some text"}});
+    array.push_back(json::element{false});
+    array.push_back(json::element{1.0123f});
+
+    json1["array"] = array;
+    json2["array2"] = array;
+    json3["buffer"] = array;
+
+    array.pop_back();
+
+    json4["buffer"] = array;
+
+    const std::vector<json::json> v{json1, json2, json3, json4, json5};
+
+    for(size_t i = 0; i < v.size(); ++i)
+    {
+        for(size_t j = i + 1; j < v.size(); ++j)
+        {
+            ASSERT_NE(v[i], v[j]);
+        }
+    }
+}
