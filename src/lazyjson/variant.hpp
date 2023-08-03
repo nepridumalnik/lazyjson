@@ -9,7 +9,7 @@ namespace lazyjson
 {
 
 /// @brief Хранилище произвольных типов
-/// @tparam ...Ts
+/// @tparam ...Ts Шаблонные типы
 template<typename... Ts>
 class variant
 {
@@ -26,6 +26,14 @@ public:
     explicit variant(const T& value)
     {
         operator=(value);
+    }
+
+    /// @brief Конструктор копирования
+    /// @tparam T Тип значения
+    /// @param other Другой объект того же класса
+    explicit variant(const variant& other)
+    {
+        ((copy_value<Ts>(other.m_type, other.m_data) || ...));
     }
 
     /// @brief Деструктор
@@ -113,7 +121,7 @@ public:
             reinterpret_cast<const T*>(m_data)->~T();
         }
 
-        new(m_data) T(value);
+        m_data = new T{value};
         m_type = typeid(T);
 
         return *this;
@@ -125,10 +133,7 @@ public:
         if(!empty())
         {
             // Перебираем все шаблонные типы и вызываем их деструкторы
-            ((destroy_value<Ts>(m_type, static_cast<void*>(m_data)) || ...));
-
-            std::memset(m_data, 0, m_max_size);
-            m_type = typeid(void);
+            ((destroy_value<Ts>(m_type) || ...));
         }
     }
 
@@ -155,16 +160,44 @@ private:
     /// @param ptr указатель на данные
     /// @return True, если был вызван деструктор
     template<typename T>
-    bool destroy_value(const std::type_index& idx, const void* ptr)
+    bool destroy_value(const std::type_index& idx)
     {
-        if(idx == typeid(T))
+        if(idx != typeid(T))
         {
-            auto ptr = reinterpret_cast<const T*>(m_data);
-            ptr->~T();
-            return true;
+            return false;
         }
 
-        return false;
+        const T* ptr = reinterpret_cast<const T*>(m_data);
+        delete ptr;
+
+        m_data = nullptr;
+        m_type = typeid(void);
+
+        return true;
+    }
+
+    /// @brief Шаблонная функция, копирования объекта, если он правильного типа
+    /// @tparam T сравнимый тип
+    /// @param idx индекс типа
+    /// @param ptr указатель на данные
+    /// @return True, если был вызван деструктор
+    template<typename T>
+    bool copy_value(const std::type_index& idx, const void* other_data)
+    {
+        if(idx != typeid(T) || !other_data)
+        {
+            return false;
+        }
+
+        clear();
+
+        T** ptr = &reinterpret_cast<T*>(m_data);
+        const T* other_ptr = reinterpret_cast<const T*>(other_data);
+        *ptr = new T{*other_ptr};
+
+        m_type = typeid(T);
+
+        return true;
     }
 
 private:
@@ -178,7 +211,7 @@ private:
     std::type_index m_type{typeid(void)};
 
     /// @brief Хранилище
-    std::byte m_data[m_max_size]{};
+    void* m_data = nullptr;
 };
 
 } // namespace lazyjson

@@ -75,9 +75,6 @@ TEST(JsonUsage, Array)
     array.push_back(num);
     array.push_back(text);
     array.push_back(value);
-    text.get<std::string>();
-
-    // TODO: исправить ошибку освобождения памяти в text
 
     for(const json::element& e: array)
     {
@@ -92,6 +89,10 @@ TEST(JsonUsage, Array)
         else if(e.is_type<bool>())
         {
             ASSERT_TRUE(e.get<bool>() == value.get<bool>());
+        }
+        else
+        {
+            GTEST_FAIL();
         }
     }
 }
