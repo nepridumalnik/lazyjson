@@ -68,9 +68,9 @@ TEST(JsonUsage, Array)
     json::json json;
     auto& array = (json["array"] = json::array{}).get<json::array>();
 
-    json::element num{1};
-    json::element text{std::string{"some very long and useless text"}};
-    json::element value{true};
+    const json::element num{1};
+    const json::element text{std::string{"some very long and useless text"}};
+    const json::element value{true};
 
     array.push_back(num);
     array.push_back(text);
