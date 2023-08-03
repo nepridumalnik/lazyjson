@@ -29,84 +29,84 @@ public:
 
     /// @brief Итератор на начало
     /// @return Итератор
-    iterator begin()
+    inline iterator begin()
     {
         return m_vec.begin();
     }
 
     /// @brief Итератор на конец
     /// @return Итератор
-    iterator end()
+    inline iterator end()
     {
         return m_vec.end();
     }
 
     /// @brief Итератор на начало
     /// @return Итератор
-    const_iterator begin() const
+    inline const_iterator begin() const
     {
         return m_vec.begin();
     }
 
     /// @brief Итератор на конец
     /// @return Итератор
-    const_iterator end() const
+    inline const_iterator end() const
     {
         return m_vec.end();
     }
 
     /// @brief Итератор на начало
     /// @return Итератор
-    const_iterator cbegin() const
+    inline const_iterator cbegin() const
     {
         return m_vec.cbegin();
     }
 
     /// @brief Итератор на конец
     /// @return Итератор
-    const_iterator cend() const
+    inline const_iterator cend() const
     {
         return m_vec.cend();
     }
 
     /// @brief Итератор на начало
     /// @return Итератор
-    reverse_iterator rbegin()
+    inline reverse_iterator rbegin()
     {
         return m_vec.rbegin();
     }
 
     /// @brief Итератор на конец
     /// @return Итератор
-    reverse_iterator rend()
+    inline reverse_iterator rend()
     {
         return m_vec.rend();
     }
 
     /// @brief Итератор на начало
     /// @return Итератор
-    const_reverse_iterator rbegin() const
+    inline const_reverse_iterator rbegin() const
     {
         return m_vec.rbegin();
     }
 
     /// @brief Итератор на конец
     /// @return Итератор
-    const_reverse_iterator rend() const
+    inline const_reverse_iterator rend() const
     {
         return m_vec.rend();
     }
 
     /// @brief Итератор на начало
     /// @return Итератор
-    const_reverse_iterator crbegin() const
+    inline const_reverse_iterator crbegin() const
     {
         return m_vec.crbegin();
     }
 
     /// @brief Итератор на конец
     /// @return Итератор
-    const_reverse_iterator crend() const
+    inline const_reverse_iterator crend() const
     {
         return m_vec.crend();
     }
@@ -114,7 +114,7 @@ public:
     /// @brief Оператор рандомного доступа
     /// @param index Индекс
     /// @return Элемент
-    element& operator[](std::size_t index)
+    inline element& operator[](std::size_t index)
     {
         return m_vec[index];
     }
@@ -122,33 +122,33 @@ public:
     /// @brief Оператор рандомного доступа
     /// @param index Индекс
     /// @return Элемент
-    const element& operator[](std::size_t index) const
+    inline const element& operator[](std::size_t index) const
     {
         return m_vec[index];
     }
 
     /// @brief Добавить элемент в массив
     /// @param value Элемент
-    void push_back(const element& value)
+    inline void push_back(const element& value)
     {
         m_vec.push_back(value);
     }
 
     /// @brief Очистить массив
-    void clear()
+    inline void clear()
     {
         m_vec.clear();
     }
 
     /// @brief Проверить пустой ли массив
     /// @return True, если пустой
-    bool empty() const
+    inline bool empty() const
     {
         return m_vec.empty();
     }
 
     /// @brief Удалить крайний объект
-    void pop_back()
+    inline void pop_back()
     {
         if(!m_vec.empty())
         {
@@ -158,21 +158,21 @@ public:
 
     /// @brief Получить первый объект
     /// @return Первый элемент
-    element& front()
+    inline element& front()
     {
         return m_vec.front();
     }
 
     /// @brief Получить первый объект
     /// @return Первый элемент
-    const element& front() const
+    inline const element& front() const
     {
         return m_vec.front();
     }
 
     /// @brief Получить размер массива
     /// @return Размер массива
-    std::size_t size() const
+    inline std::size_t size() const
     {
         return m_vec.size();
     }
