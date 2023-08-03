@@ -203,7 +203,7 @@ public:
     /// @return True, если не равны
     bool operator!=(const array& other) const
     {
-        return operator==(other);
+        return !operator==(other);
     }
 
 private:

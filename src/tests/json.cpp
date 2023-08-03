@@ -150,3 +150,57 @@ TEST(JsonUsage, CompareNotEqualJsons)
         }
     }
 }
+
+// Сравнение одинаковых JSON объектов
+TEST(JsonUsage, CompareEqualArrays)
+{
+    json::array array1;
+    json::array array2;
+
+    array1.push_back(json::element{1});
+    array2.push_back(json::element{1});
+    array1.push_back(json::element{std::string{"some text"}});
+    array2.push_back(json::element{std::string{"some text"}});
+    array1.push_back(json::element{false});
+    array2.push_back(json::element{false});
+    array1.push_back(json::element{1.0123f});
+    array2.push_back(json::element{1.0123f});
+
+    ASSERT_EQ(array1, array2);
+}
+
+// Сравнение разных JSON массивов
+TEST(JsonUsage, CompareNotEqualArrays)
+{
+    json::array array1;
+    json::array array2;
+
+    array1.push_back(json::element{1});
+    array2.push_back(json::element{1});
+    array1.push_back(json::element{std::string{"some text"}});
+    array2.push_back(json::element{std::string{"some text"}});
+    array1.push_back(json::element{false});
+    array1.push_back(json::element{1.0123f});
+
+    ASSERT_NE(array1, array2);
+}
+
+// Сравнение JSON массивов после копирования
+TEST(JsonUsage, CompareCopiedArrays)
+{
+    json::array array1;
+    json::array array2;
+
+    array1.push_back(json::element{1});
+    array1.push_back(json::element{std::string{"some text"}});
+    array1.push_back(json::element{false});
+    array1.push_back(json::element{1.0123f});
+
+    array2 = array1;
+    json::array array3{array2};
+    json::array array4 = array3;
+
+    ASSERT_EQ(array1, array2);
+    ASSERT_EQ(array1, array3);
+    ASSERT_EQ(array1, array4);
+}
