@@ -83,12 +83,29 @@ public:
     /// @tparam T тип
     /// @param value значение
     /// @return True, если значения равны
+    bool operator==(const variant& other) const
+    {
+        return ((compare_value<Ts>(other.m_type, other.m_data) || ...));
+    }
+
+    /// @brief Оператор сравнения
+    /// @param value значение
+    /// @return True, если значения не равны
+    bool operator!=(const variant& value) const
+    {
+        return !operator==(value);
+    }
+
+    /// @brief Оператор сравнения
+    /// @tparam T тип
+    /// @param value значение
+    /// @return True, если значения равны
     template<typename T>
-    bool operator==(const T& value)
+    bool operator==(const T& value) const
     {
         if(m_type != typeid(T))
         {
-            throw std::bad_variant_access();
+            return false;
         }
 
         const auto& data = *reinterpret_cast<const T*>(m_data);
@@ -100,7 +117,7 @@ public:
     /// @param value значение
     /// @return True, если значения не равны
     template<typename T>
-    bool operator!=(const T& value)
+    bool operator!=(const T& value) const
     {
         return !operator==(value);
     }
@@ -157,7 +174,6 @@ private:
     /// @brief Шаблонная функция, удаляющая объект, если он правильного типа
     /// @tparam T сравнимый тип
     /// @param idx индекс типа
-    /// @param ptr указатель на данные
     /// @return True, если был вызван деструктор
     template<typename T>
     bool destroy_value(const std::type_index& idx)
@@ -174,6 +190,25 @@ private:
         m_type = typeid(void);
 
         return true;
+    }
+
+    /// @brief Шаблонная функция сравнения
+    /// @tparam T сравнимый тип
+    /// @param idx индекс типа
+    /// @param other_data указатель на данные
+    /// @return True, если был вызван деструктор
+    template<typename T>
+    bool compare_value(const std::type_index& idx, const void* other_data) const
+    {
+        if(idx != m_type || m_type != typeid(T))
+        {
+            return false;
+        }
+
+        const T* ptr = reinterpret_cast<const T*>(m_data);
+        const T* other_ptr = reinterpret_cast<const T*>(other_data);
+
+        return (*ptr) == (*other_ptr);
     }
 
     /// @brief Шаблонная функция, копирования объекта, если он правильного типа

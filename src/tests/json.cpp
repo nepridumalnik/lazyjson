@@ -96,3 +96,22 @@ TEST(JsonUsage, Array)
         }
     }
 }
+
+// Сравнение одинаковых JSON объектов
+TEST(JsonUsage, CompareEqualJsons)
+{
+    json::json json1;
+    json::json json2;
+
+    json::array array;
+
+    array.push_back(json::element{1});
+    array.push_back(json::element{std::string{"some text"}});
+    array.push_back(json::element{false});
+    array.push_back(json::element{1.0123f});
+
+    json1["array"] = array;
+    json2["array"] = array;
+
+    ASSERT_EQ(json1, json2);
+}

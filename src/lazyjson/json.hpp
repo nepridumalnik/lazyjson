@@ -177,6 +177,35 @@ public:
         return m_vec.size();
     }
 
+    /// @brief Оператор сравнения
+    /// @param other Другой массив
+    /// @return True, если равны
+    bool operator==(const array& other) const
+    {
+        if(other.size() != size())
+        {
+            return false;
+        }
+
+        for(size_t i = 0; i < size(); ++i)
+        {
+            if(m_vec[i] != other.m_vec[i])
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /// @brief Оператор сравнения
+    /// @param other Другой массив
+    /// @return True, если не равны
+    bool operator!=(const array& other) const
+    {
+        return operator==(other);
+    }
+
 private:
     /// @brief Массив данных
     std::vector<element> m_vec;
@@ -207,6 +236,37 @@ public:
     const element& operator[](const std::string& key) const
     {
         return m_obj.at(key);
+    }
+
+    /// @brief Оператор сравнения
+    /// @param other JSON объект
+    /// @return True, если равны
+    bool operator==(const json& other) const
+    {
+        for(auto this_it = m_obj.begin(), other_it = other.m_obj.begin();
+            this_it != m_obj.end() && other_it != other.m_obj.end();
+            ++this_it, ++other_it)
+        {
+            if(this_it->first != other_it->first)
+            {
+                return false;
+            }
+
+            if(this_it->second != other_it->second)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /// @brief Оператор сравнения
+    /// @param other JSON объект
+    /// @return True, если не равны
+    bool operator!=(const json& other) const
+    {
+        return operator==(other);
     }
 
 private:
