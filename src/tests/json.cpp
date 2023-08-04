@@ -211,3 +211,61 @@ TEST(JsonUsage, CompareCopiedArrays)
         }
     }
 }
+
+// Сериализация пустого массива
+TEST(JsonUsage, SerializeEmptyArray)
+{
+    json::array array;
+    const std::string data = array;
+    const std::string compare = "[]";
+
+    ASSERT_EQ(data, compare);
+}
+
+// Сериализация массива
+TEST(JsonUsage, SerializeArray)
+{
+    json::array array;
+
+    array.push_back(json::element{1});
+    array.push_back(json::element{std::string{"some text"}});
+    array.push_back(json::element{false});
+    array.push_back(json::element{1.0123f});
+    array.push_back(json::element{array});
+
+    const std::string data = array;
+    const std::string compare = "[1,\"some text\",false,1.012300,[1,\"some text\",false,1.012300]]";
+
+    ASSERT_EQ(data, compare);
+}
+
+// Сериализация массива с JSON
+TEST(JsonUsage, SerializeJsonWithArray)
+{
+    json::json json;
+    json::array array;
+
+    array.push_back(json::element{1});
+    array.push_back(json::element{std::string{"some text"}});
+    array.push_back(json::element{false});
+    array.push_back(json::element{1.0123f});
+
+    json["array"] = array;
+
+    const std::string data = json;
+    const std::string compare = "{\"array\":[1,\"some text\",false,1.012300]}";
+
+    ASSERT_EQ(data, compare);
+}
+
+// Сериализация пустого JSON
+TEST(JsonUsage, SerializeEmptyJson)
+{
+    json::json json;
+    json::array array;
+
+    const std::string data = json;
+    const std::string compare = "{}";
+
+    ASSERT_EQ(data, compare);
+}

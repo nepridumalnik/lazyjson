@@ -18,10 +18,16 @@ class json;
 /// @brief Тип значения
 using element = variant<int, float, bool, std::string, json, array>;
 
+/// @brief Конвертация в строку
+/// @param e Элемент JSON объекта
+/// @return Строка
+std::string to_string(const element& e);
+
 /// @brief Массив
 class array
 {
 public:
+#pragma region Iterators
     using iterator = std::vector<element>::iterator;
     using const_iterator = std::vector<element>::const_iterator;
     using reverse_iterator = std::vector<element>::reverse_iterator;
@@ -110,6 +116,8 @@ public:
     {
         return m_vec.crend();
     }
+
+#pragma endregion Iterators
 
     /// @brief Оператор рандомного доступа
     /// @param index Индекс
@@ -206,6 +214,27 @@ public:
         return !operator==(other);
     }
 
+    /// @brief Приведение типа к строке
+    /// @return Строка
+    operator std::string()
+    {
+        std::string data{"["};
+
+        for(size_t i = 0; i < m_vec.size(); ++i)
+        {
+            data += to_string(m_vec[i]);
+
+            if(i < (m_vec.size() - 1))
+            {
+                data += ',';
+            }
+        }
+
+        data += ']';
+
+        return data;
+    }
+
 private:
     /// @brief Массив данных
     std::vector<element> m_vec;
@@ -274,9 +303,59 @@ public:
         return !operator==(other);
     }
 
+    /// @brief Приведение типа к строке
+    /// @return Строка
+    operator std::string()
+    {
+        std::string data{"{"};
+
+        for(const auto& e: m_obj)
+        {
+            data += '"' + e.first + "\":" + to_string(e.second) + ',';
+        }
+
+        if(data.size() == 1)
+        {
+            data += '}';
+        }
+        else
+        {
+            data.back() = '}';
+        }
+
+        return data;
+    }
+
 private:
     /// @brief Список в виде ключ/значение
     std::unordered_map<std::string, element> m_obj;
 };
+
+/// @brief Реализация to_string
+std::string to_string(const element& e)
+{
+    if(e.is_type<int>())
+    {
+        return std::to_string(e.get<int>());
+    }
+    else if(e.is_type<float>())
+    {
+        return std::to_string(e.get<float>());
+    }
+    else if(e.is_type<bool>())
+    {
+        return e.get<bool>() ? "true" : "false";
+    }
+    else if(e.is_type<std::string>())
+    {
+        return '"' + e.get<std::string>() + '"';
+    }
+    else if(e.is_type<json>())
+    {
+        return e.get<json>();
+    }
+
+    return e.get<array>();
+}
 
 } // namespace lazyjson
