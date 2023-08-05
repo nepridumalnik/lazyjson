@@ -216,7 +216,7 @@ public:
 
     /// @brief Приведение типа к строке
     /// @return Строка
-    operator std::string()
+    operator std::string() const
     {
         std::string data{"["};
 
@@ -244,6 +244,23 @@ private:
 class json
 {
 public:
+    /// @brief Конструктор по умолчанию
+    json() = default;
+
+    /// @brief Конструктор присваивания
+    /// @param data Строка
+    json(const char* data)
+    {
+        operator=(data);
+    }
+
+    /// @brief Конструктор присваивания
+    /// @param data Строка
+    json(const std::string& data)
+    {
+        operator=(data);
+    }
+
     /// @brief Доступ к объекту по ключу
     /// @param key Ключ
     /// @return Значение
@@ -324,6 +341,23 @@ public:
         }
 
         return data;
+    }
+
+    /// @brief Приведение строки к JSON
+    /// @param data Строка
+    void operator=(const char* data)
+    {
+        operator=(std::string{data});
+    }
+
+    /// @brief Приведение строки к JSON
+    /// @param data Строка
+    void operator=(const std::string& data)
+    {
+        std::unordered_map<std::string, element> new_obj;
+
+        m_obj.clear();
+        m_obj = new_obj;
     }
 
 private:

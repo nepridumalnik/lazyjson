@@ -269,3 +269,20 @@ TEST(JsonUsage, SerializeEmptyJson)
 
     ASSERT_EQ(data, compare);
 }
+
+// Сериализация массива с JSON
+TEST(JsonUsage, DeserializeJsonWithArray)
+{
+    json::json deserialized = "{\"array\":[1,\"some text\",false,1.012300]}";
+    json::json json;
+    json::array array;
+
+    array.push_back(json::element{1});
+    array.push_back(json::element{std::string{"some text"}});
+    array.push_back(json::element{false});
+    array.push_back(json::element{1.0123f});
+
+    json["array"] = array;
+
+    ASSERT_EQ(deserialized, json);
+}
