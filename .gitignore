@@ -6,3 +6,6 @@ build
 
 # Tests
 Testing
+
+# Conan generation files
+CMakeUserPresets.json

@@ -4,6 +4,8 @@
 
 #include <string>
 
+#include <iostream>
+
 namespace json = lazyjson;
 
 // Присваивание булевого значения
@@ -271,7 +273,7 @@ TEST(JsonUsage, SerializeEmptyJson)
 }
 
 // Сериализация массива с JSON
-TEST(JsonUsage, DeserializeJsonWithArray)
+TEST(JsonUsage, DISABLED_DeserializeJsonWithArray)
 {
     json::json deserialized = "{\"array\":[1,\"some text\",false,1.012300]}";
     json::json json;

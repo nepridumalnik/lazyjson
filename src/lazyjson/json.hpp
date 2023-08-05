@@ -266,7 +266,7 @@ public:
     /// @return Значение
     element& operator[](const std::string& key)
     {
-        auto& it = m_obj.find(key);
+        const auto& it = m_obj.find(key);
         if(it != m_obj.end())
         {
             return it->second;
