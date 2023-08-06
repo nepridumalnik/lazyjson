@@ -9,6 +9,8 @@ set(SOURCES
 
     json.cpp
     variant.cpp
+
+    custom_allocator.cpp
 )
 
 get_filename_component(PARENT_DIR ../ ABSOLUTE)
