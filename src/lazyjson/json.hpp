@@ -27,6 +27,30 @@ std::string to_string(const element& e);
 class array
 {
 public:
+    /// @brief Конструктор по умолчанию
+    array()
+    {
+    }
+
+    /// @brief Конструктор копирования
+    /// @param other Другой экземпляр класса
+    array(const array& other)
+    {
+        operator=(other);
+    }
+
+    /// @brief Оператор присваивания
+    /// @param other Другой экземпляр класса
+    void operator=(const array& other)
+    {
+        m_vec.reserve(other.m_vec.size());
+
+        for(const auto& e: other.m_vec)
+        {
+            m_vec.push_back(e);
+        }
+    }
+
 #pragma region Iterators
     using iterator = std::vector<element>::iterator;
     using const_iterator = std::vector<element>::const_iterator;
@@ -245,7 +269,7 @@ class json
 {
 public:
     /// @brief Конструктор по умолчанию
-    json() = default;
+    json(){};
 
     /// @brief Конструктор присваивания
     /// @param data Строка

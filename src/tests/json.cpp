@@ -1,10 +1,10 @@
 #include <lazyjson/json.hpp>
 
+#include <tests/custom_allocator.hpp>
+
 #include <gtest/gtest.h>
 
 #include <string>
-
-#include <iostream>
 
 namespace json = lazyjson;
 
@@ -275,9 +275,15 @@ TEST(JsonUsage, SerializeEmptyJson)
 // Сериализация массива с JSON
 TEST(JsonUsage, DISABLED_DeserializeJsonWithArray)
 {
+    // TODO: доделать десериализацию
+
+    size_t start = get_allocations();
     json::json deserialized = "{\"array\":[1,\"some text\",false,1.012300]}";
+    size_t point0 = get_allocations();
     json::json json;
+    size_t point1 = get_allocations();
     json::array array;
+    size_t point2 = get_allocations();
 
     array.push_back(json::element{1});
     array.push_back(json::element{std::string{"some text"}});
