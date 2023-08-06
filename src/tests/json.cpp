@@ -1,4 +1,4 @@
-#include <lazyjson/json.hpp>
+#include <lazyjson/lazyjson.h>
 
 #include <tests/custom_allocator.hpp>
 

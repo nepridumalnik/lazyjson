@@ -64,9 +64,9 @@ TEST(VariantUsage, CreationOk)
 // Создание с неверным типом
 TEST(VariantUsage, CreationBad)
 {
-    ASSERT_THROW((CreateVar<float, int>(int{})), std::bad_variant_access);
-    ASSERT_THROW((CreateVar<size_t, short>(short{})), std::bad_variant_access);
-    ASSERT_THROW((CreateVar<char, bool>(bool{})), std::bad_variant_access);
+    ASSERT_THROW((CreateVar<float, int>(int{})), lazyjson::bad_variant_access);
+    ASSERT_THROW((CreateVar<size_t, short>(short{})), lazyjson::bad_variant_access);
+    ASSERT_THROW((CreateVar<char, bool>(bool{})), lazyjson::bad_variant_access);
 }
 
 // Проверка установки значений
@@ -83,8 +83,8 @@ TEST(VariantUsage, SetBadValues)
 {
     json::variant<int, bool> var;
 
-    ASSERT_THROW(var = float{}, std::bad_variant_access);
-    ASSERT_THROW(var = char{}, std::bad_variant_access);
+    ASSERT_THROW(var = float{}, lazyjson::bad_variant_access);
+    ASSERT_THROW(var = char{}, lazyjson::bad_variant_access);
 }
 
 // Проверка допустимых типов
@@ -186,7 +186,7 @@ TEST(VariantUsage, BoolSetValue)
     ASSERT_NO_THROW(test = var.get<bool>());
     ASSERT_TRUE(var == test);
 
-    ASSERT_THROW(int test = var.get<int>(), std::bad_variant_access);
+    ASSERT_THROW(int test = var.get<int>(), lazyjson::bad_variant_access);
 }
 
 // Присваивание целочисленных значений
@@ -204,7 +204,7 @@ TEST(VariantUsage, IntSetValue)
         ASSERT_NO_THROW(test = var.get<int>());
         ASSERT_TRUE(var == test);
 
-        ASSERT_THROW(std::string test = var.get<std::string>(), std::bad_variant_access);
+        ASSERT_THROW(std::string test = var.get<std::string>(), lazyjson::bad_variant_access);
     }
 }
 
@@ -226,7 +226,7 @@ TEST(VariantUsage, StringSetValue)
         ASSERT_TRUE(var == test);
         ASSERT_TRUE(check == test);
 
-        ASSERT_THROW(int test = var.get<int>(), std::bad_variant_access);
+        ASSERT_THROW(int test = var.get<int>(), lazyjson::bad_variant_access);
     }
 }
 
