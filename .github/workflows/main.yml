@@ -28,7 +28,7 @@ jobs:
 
       - run: sudo apt update
       - name: Install Dependencies
-        run: sudo apt install --yes --no-install-recommends conan
+        run: sudo pip3 install conan
       - name: Build script
         run: python3 build.py
       - name: Test
@@ -41,6 +41,8 @@ jobs:
     steps:
     
       - uses: actions/checkout@v2
+      - name: Install Dependencies
+        run:  pip3 install conan
       - name: Build script
         run: python3 build.py
       - name: Test
