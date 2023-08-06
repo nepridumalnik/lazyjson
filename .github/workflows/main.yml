@@ -46,5 +46,5 @@ jobs:
       - name: Build script
         run: python3 build.py
       - name: Test
-        run: .\build\src\tests\lazy_json_tests
+        run: .\build\src\tests\Debug\lazy_json_tests.exe
    
