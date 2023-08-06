@@ -1,25 +1,26 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from conans import ConanFile, CMake
+from conan import ConanFile
+from conan.tools.cmake import CMake
 
 
-class QtTest(ConanFile):
-    name = 'QtTest'
+class ConanRecipt(ConanFile):
+    name = 'LazyJson'
 
     settings = [
         'os',
-        'build_type',
+        "compiler",
         'arch',
         'build_type',
     ]
 
     generators = [
-        'cmake_find_package',
+        "CMakeToolchain", "CMakeDeps"
     ]
 
     def requirements(self) -> None:
-        self.requires('gtest/[,include_prerelease=True]')
+        self.requires('gtest/1.14.0')
 
     def build(self) -> None:
         cmake: CMake = CMake(self)

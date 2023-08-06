@@ -4,6 +4,7 @@
 #include <type_traits>
 #include <stdexcept>
 #include <cstddef>
+#include <variant>
 
 namespace lazyjson
 {
@@ -33,7 +34,7 @@ public:
     /// @param other Другой объект того же класса
     explicit variant(const variant& other)
     {
-        ((copy_value<Ts>(other.m_type, other.m_data) || ...));
+        *this = other;
     }
 
     /// @brief Деструктор
@@ -144,6 +145,16 @@ public:
         return *this;
     }
 
+    /// @brief Оператор присваивания
+    /// @param other значение
+    /// @return Ссылка на экземпляр
+    variant& operator=(const variant& other)
+    {
+        ((copy_value<Ts>(other.m_type, other.m_data) || ...));
+
+        return *this;
+    }
+
     /// @brief Очистка содержимого
     void clear()
     {
@@ -226,10 +237,9 @@ private:
 
         clear();
 
-        T** ptr = &reinterpret_cast<T*>(m_data);
-        const T* other_ptr = reinterpret_cast<const T*>(other_data);
-        *ptr = new T{*other_ptr};
-
+        const T* otherDataPtr = static_cast<const T*>(other_data);
+        
+        m_data = new T{*otherDataPtr};
         m_type = typeid(T);
 
         return true;

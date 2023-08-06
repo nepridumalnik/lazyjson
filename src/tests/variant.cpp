@@ -247,3 +247,16 @@ TEST(VariantUsage, DestroyClassInstance)
     // Т.к. структура уничтожается при первом создании и при очистке variant
     ASSERT_EQ(counter, 1);
 }
+
+// Копирование
+TEST(VariantUsage, Coping)
+{
+    json::variant<int, bool, std::string> var1, var2;
+    var1 = 1;
+    var2 = var1;
+
+    ASSERT_TRUE(var1.is_type<int>());
+    ASSERT_TRUE(var2.is_type<int>());
+
+    ASSERT_EQ(var1.get<int>(), var2.get<int>());
+}
