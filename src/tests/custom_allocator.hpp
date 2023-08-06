@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstddef>
+
 /// @brief Кастомный аллокатор
 /// @param size Размер памяти
 /// @return Указатель на выделенную память

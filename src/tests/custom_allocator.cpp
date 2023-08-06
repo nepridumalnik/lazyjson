@@ -14,7 +14,7 @@ void* operator new(const size_t size)
     return malloc(size);
 }
 
-void operator delete(void* ptr)
+void operator delete(void* ptr) noexcept
 {
     ++deallocations_counter;
     free(ptr);

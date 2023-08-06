@@ -4,10 +4,18 @@
 #include <type_traits>
 #include <stdexcept>
 #include <cstddef>
-#include <variant>
 
 namespace lazyjson
 {
+
+class bad_variant_access : public std::exception
+{
+    public:
+    const char* what() const noexcept override
+    {
+        return "bad_variant_access";
+    }
+};
 
 /// @brief Хранилище произвольных типов
 /// @tparam ...Ts Шаблонные типы
@@ -60,7 +68,7 @@ public:
     {
         if(!is_type<T>())
         {
-            throw std::bad_variant_access();
+            throw bad_variant_access();
         }
 
         return *reinterpret_cast<const T*>(m_data);
@@ -74,7 +82,7 @@ public:
     {
         if(!is_type<T>())
         {
-            throw std::bad_variant_access();
+            throw bad_variant_access();
         }
 
         return *reinterpret_cast<T*>(m_data);
@@ -131,7 +139,7 @@ public:
     {
         if(!is_valid_type<T>())
         {
-            throw std::bad_variant_access();
+            throw bad_variant_access();
         }
 
         if(!empty())
